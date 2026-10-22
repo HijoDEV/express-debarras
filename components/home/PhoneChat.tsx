@@ -2,11 +2,10 @@
 import { AnimatePresence, motion, useInView, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { BadgeCheck, Camera, CheckCheck, Clock, Mic, Plus, Recycle, SendHorizontal, Truck as TruckIcon, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Illus } from '@/components/illus/Illus';
 import { LogoTile } from '@/components/brand/Logo';
 import { Phone } from '@/components/ui/Phone';
 import { cn } from '@/lib/cn';
-import type { IllusId } from '@/lib/data';
+import { photo, type PhotoKey } from '@/lib/photos';
 
 /* ---------- Scénario (ms depuis le début de la boucle) ---------- */
 const TYPED = 'Bonjour ! Cave à vider à Rouen, combien ?';
@@ -38,11 +37,11 @@ const bubble = {
   exit: { opacity: 0, transition: { duration: 0.15 } },
 };
 
-function Photo({ id, bg }: { id: IllusId; bg: string }) {
+function Photo({ k }: { k: PhotoKey }) {
   return (
-    <div className="relative grid aspect-square place-items-center overflow-hidden rounded-[10px]" style={{ background: bg }}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,.25),transparent_55%)]" />
-      <Illus id={id} className="relative h-[78%] w-[78%] drop-shadow" />
+    <div className="relative aspect-square overflow-hidden rounded-[10px] bg-[#6E6455]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={photo(k, 200, 200)} alt="" width={100} height={100} loading="lazy" decoding="async" className="h-full w-full object-cover" />
     </div>
   );
 }
@@ -217,9 +216,9 @@ export function PhoneChat() {
                 {at(T.photos) && (
                   <motion.div key="m2" layout {...bubble} className="ml-auto w-[74%] rounded-2xl rounded-br-md bg-[#D9F5C7] p-1.5 shadow-sm">
                     <div className="grid grid-cols-3 gap-1">
-                      <Photo id="box" bg="linear-gradient(160deg,#6E6455,#3E3830)" />
-                      <Photo id="bike" bg="linear-gradient(160deg,#5D6B76,#323C44)" />
-                      <Photo id="dresser" bg="linear-gradient(160deg,#7A6A58,#463B30)" />
+                      <Photo k="caveAvant" />
+                      <Photo k="garage" />
+                      <Photo k="cartons" />
                     </div>
                     <p className="flex items-center justify-between px-1 pt-1 text-[10.5px] text-navy/60">
                       <span className="inline-flex items-center gap-1">

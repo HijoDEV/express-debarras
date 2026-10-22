@@ -1,14 +1,23 @@
 import { Illus } from '@/components/illus/Illus';
 import { Label } from '@/components/ui/Label';
 import { STAMPS } from '@/lib/data';
+import { photo } from '@/lib/photos';
 
 function Stamp({ s, i }: { s: (typeof STAMPS)[number]; i: number }) {
   return (
     <li className="shrink-0 px-2.5">
       <div className="stamp w-[168px] bg-white p-[14px] transition-transform duration-300 hover:-translate-y-1.5 hover:rotate-[-1.5deg] sm:w-[188px]">
         <div className="relative grid aspect-[4/3.4] place-items-center overflow-hidden" style={{ background: s.tone }}>
-          <Illus id={s.illus} className="h-[62%] w-[62%]" />
-          <span className="absolute right-2 top-1.5 font-mono text-[10px] font-semibold text-navy/70">{String(i + 1).padStart(2, '0')}</span>
+          {s.photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={photo(s.photo, 360, 306)} alt="" width={180} height={153} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover saturate-[.9]" />
+          ) : (
+            <Illus id={s.illus} className="h-[62%] w-[62%]" />
+          )}
+          <span className="absolute bottom-1.5 left-1.5 grid h-8 w-8 place-items-center rounded-lg bg-white/90 shadow-sm backdrop-blur">
+            <Illus id={s.illus} className="h-6 w-6" />
+          </span>
+          <span className="absolute right-1.5 top-1.5 rounded bg-white/85 px-1 font-mono text-[10px] font-semibold text-navy">{String(i + 1).padStart(2, '0')}</span>
         </div>
         <p className="mt-2.5 truncate font-display text-[16px] tracking-[-0.02em] text-navy">{s.name}</p>
         <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-navy/70">Express · Rouen</p>

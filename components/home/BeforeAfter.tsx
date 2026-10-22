@@ -2,20 +2,29 @@
 import { useState } from 'react';
 import { Illus } from '@/components/illus/Illus';
 import type { IllusId } from '@/lib/data';
+import { photo, type PhotoKey } from '@/lib/photos';
 
 /** Comparateur avant / après à curseur. Fonds dégradés en attendant les vraies photos. */
-export function BeforeAfter({ title, items, from, to }: { title: string; items: IllusId[]; from: string; to: string }) {
+export function BeforeAfter({ title, items, from, to, before, after }: { title: string; items: IllusId[]; from: string; to: string; before?: PhotoKey; after?: PhotoKey }) {
   const [pos, setPos] = useState(55);
   return (
     <figure className="group relative aspect-[4/3.6] select-none overflow-hidden rounded-2xl ring-1 ring-line">
       {/* Après */}
       <div className="absolute inset-0" style={{ background: to }}>
+        {after && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={photo(after, 520, 470)} alt="" width={260} height={235} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+        )}
         <div className="absolute inset-x-0 bottom-0 h-[30%] bg-[linear-gradient(transparent,rgba(14,42,59,.06))]" />
         <span className="absolute bottom-3 right-3 rounded-full bg-tri-dark px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-white">Après</span>
       </div>
       {/* Avant */}
       <div className="absolute inset-0" style={{ background: from, clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-        <div className="absolute inset-0 grid grid-cols-3 place-items-center gap-1 p-4 pb-10">
+        {before && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={photo(before, 520, 470)} alt="" width={260} height={235} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+        )}
+        <div className={before ? 'hidden' : 'absolute inset-0 grid grid-cols-3 place-items-center gap-1 p-4 pb-10'}>
           {items.map((id, i) => (
             <Illus key={i} id={id} className="h-full max-h-14 w-full opacity-80" />
           ))}

@@ -228,19 +228,19 @@ export const FILIERES = [
 ];
 
 /* ---------- Défilé timbres ---------- */
-export const STAMPS: { name: string; illus: IllusId; tone: string }[] = [
-  { name: 'Meuble seul', illus: 'armchair', tone: '#FFE7A3' },
-  { name: 'Cave', illus: 'box', tone: '#E8E2D2' },
-  { name: 'Grenier', illus: 'lamp', tone: '#F3D9B8' },
-  { name: 'Garage', illus: 'bike', tone: '#D8E6EF' },
-  { name: 'Box', illus: 'bag', tone: '#E3F4EC' },
-  { name: 'Appartement', illus: 'sofa', tone: '#FFE7A3' },
-  { name: 'Maison', illus: 'wardrobe', tone: '#F0E4D7' },
-  { name: 'Succession', illus: 'dresser', tone: '#E8E2D2' },
-  { name: 'Bureaux', illus: 'desk', tone: '#D8E6EF' },
-  { name: 'Commerce', illus: 'shelf', tone: '#F3D9B8' },
-  { name: 'Fin de chantier', illus: 'table', tone: '#E3F4EC' },
-  { name: 'Électroménager', illus: 'fridge', tone: '#FFE7A3' },
+export const STAMPS: { name: string; illus: IllusId; tone: string; photo?: import('./photos').PhotoKey }[] = [
+  { name: 'Meuble seul', illus: 'armchair', tone: '#FFE7A3', photo: 'meuble' },
+  { name: 'Cave', illus: 'box', tone: '#E8E2D2', photo: 'cartons' },
+  { name: 'Grenier', illus: 'lamp', tone: '#F3D9B8', photo: 'grenier' },
+  { name: 'Garage', illus: 'bike', tone: '#D8E6EF', photo: 'garage' },
+  { name: 'Box', illus: 'bag', tone: '#E3F4EC', photo: 'box' },
+  { name: 'Appartement', illus: 'sofa', tone: '#FFE7A3', photo: 'appartement' },
+  { name: 'Maison', illus: 'wardrobe', tone: '#F0E4D7', photo: 'maison' },
+  { name: 'Succession', illus: 'dresser', tone: '#E8E2D2', photo: 'grenierAvant' },
+  { name: 'Bureaux', illus: 'desk', tone: '#D8E6EF', photo: 'bureaux' },
+  { name: 'Commerce', illus: 'shelf', tone: '#F3D9B8', photo: 'commerce' },
+  { name: 'Fin de chantier', illus: 'table', tone: '#E3F4EC', photo: 'chantier' },
+  { name: 'Électroménager', illus: 'fridge', tone: '#FFE7A3', photo: 'electromenager' },
 ];
 
 /* ---------- Avis (EXEMPLES de démonstration) ---------- */

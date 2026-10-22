@@ -75,7 +75,7 @@ export function Footer() {
 
       <div className="mx-auto flex max-w-[1200px] flex-col gap-2 border-t border-line px-4 py-6 text-[13px] text-navy/70 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <p>© 2026 Express Débarras</p>
-        <p>Projet de création d’entreprise réalisé dans le cadre du BTS NDRC</p>
+        <p>Projet de création d’entreprise réalisé dans le cadre du BTS NDRC · Photos d’illustration : Unsplash</p>
       </div>
     </footer>
   );
