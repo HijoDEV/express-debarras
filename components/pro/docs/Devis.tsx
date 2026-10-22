@@ -47,7 +47,7 @@ export function DevisList() {
           ]}
         />
       </div>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden" data-tour="devis-list">
         {error ? (
           <ErrorState message={error} onRetry={reload} />
         ) : loading ? (

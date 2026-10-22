@@ -153,7 +153,7 @@ export function NewDemand() {
       </div>
 
       {/* étapes */}
-      <ol className="mb-6 grid grid-cols-4 gap-2" aria-label="Étapes">
+      <ol className="mb-6 grid grid-cols-4 gap-2" aria-label="Étapes" data-tour="nd-steps">
         {STEPS.map((l, i) => (
           <li key={l}>
             <button onClick={() => i < step && go(i)} disabled={i > step} aria-current={i === step ? 'step' : undefined} className="w-full text-left">
@@ -198,7 +198,7 @@ export function NewDemand() {
         </Card>
 
         {/* récapitulatif en direct */}
-        <aside className="lg:sticky lg:top-24" aria-label="Estimation">
+        <aside className="lg:sticky lg:top-24" aria-label="Estimation" data-tour="nd-estimate">
           <Card className="overflow-hidden">
             <div className="on-dark bg-navy p-5 text-white">
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal">Estimation HT</p>

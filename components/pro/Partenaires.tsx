@@ -49,7 +49,7 @@ export function Partenaires() {
     <div>
       <PageHeader title="Programme partenaires" sub="Recommandez Express Débarras à vos propriétaires et locataires : 5 % de commission sur chaque chantier." />
       <div className="grid gap-4 lg:grid-cols-[1fr_1.3fr]">
-        <Card className="p-5">
+        <Card className="p-5" data-tour="referral">
           <p className="text-[15px] font-semibold">Votre lien de recommandation</p>
           <div className="mt-3 flex gap-2">
             <code className="min-w-0 flex-1 truncate rounded-[10px] bg-p-soft px-3 py-2.5 font-mono text-[13px]">{link}</code>

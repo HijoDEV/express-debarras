@@ -64,7 +64,7 @@ export function Topbar() {
             Rechercher…
             <kbd className="ml-auto rounded border border-p-line bg-p-card px-1.5 font-mono text-[11px]">⌘K</kbd>
           </button>
-          <button onClick={openPalette} className="grid h-9 w-9 place-items-center rounded-[10px] hover:bg-p-hover md:hidden" aria-label="Rechercher">
+          <button onClick={openPalette} data-tour="search" className="grid h-9 w-9 place-items-center rounded-[10px] hover:bg-p-hover md:hidden" aria-label="Rechercher">
             <Search className="h-[18px] w-[18px]" />
           </button>
           <button onClick={toggleTheme} className="grid h-9 w-9 place-items-center rounded-[10px] hover:bg-p-hover" aria-label={theme === 'dark' ? 'Passer en thème clair' : 'Passer en thème sombre'}>
@@ -74,7 +74,7 @@ export function Topbar() {
               </motion.span>
             </AnimatePresence>
           </button>
-          <button onClick={openNotifs} className="relative grid h-9 w-9 place-items-center rounded-[10px] hover:bg-p-hover" aria-label={`Notifications, ${counters.unreadNotifs} non lues`}>
+          <button data-tour="bell" onClick={openNotifs} className="relative grid h-9 w-9 place-items-center rounded-[10px] hover:bg-p-hover" aria-label={`Notifications, ${counters.unreadNotifs} non lues`}>
             <Bell className="h-[18px] w-[18px]" />
             {counters.unreadNotifs > 0 && (
               <motion.span key={counters.unreadNotifs} initial={{ scale: 0.4 }} animate={{ scale: 1 }} className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#E0533A] px-1 text-[10px] font-bold text-white">

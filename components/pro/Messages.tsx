@@ -22,7 +22,7 @@ export function Messages() {
   return (
     <div>
       <h1 className="mb-5 font-display text-[28px] leading-none tracking-[-0.035em] sm:text-[34px]">Messages</h1>
-      <Card className="grid h-[calc(100vh-260px)] min-h-[520px] overflow-hidden lg:grid-cols-[340px_1fr]">
+      <Card data-tour="msg" className="grid h-[calc(100vh-260px)] min-h-[520px] overflow-hidden lg:grid-cols-[340px_1fr]">
         <div className={cn('flex min-h-0 flex-col border-p-line lg:border-r', active && 'hidden lg:flex')}>
           {loading || !threads ? (
             <LoadingList rows={7} />

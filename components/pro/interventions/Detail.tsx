@@ -94,7 +94,7 @@ function DetailBody({ id, onClose }: { id: string; onClose: () => void }) {
 
       {/* carte + équipe */}
       {it.status !== 'annulee' && (
-        <section aria-label="Suivi en direct">
+        <section aria-label="Suivi en direct" data-tour="int-map">
           <RouenMap target={it.site.map} status={it.status} since={enRouteAt} />
           <div className="mt-3 flex items-center justify-between gap-3 rounded-[12px] border border-p-line p-3">
             <div className="flex items-center gap-3">
@@ -117,7 +117,7 @@ function DetailBody({ id, onClose }: { id: string; onClose: () => void }) {
       )}
 
       {/* frise */}
-      <section>
+      <section data-tour="int-timeline">
         <h3 className="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-p-muted">Suivi</h3>
         <Timeline it={it} />
       </section>

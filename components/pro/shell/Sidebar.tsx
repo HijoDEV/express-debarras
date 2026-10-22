@@ -73,7 +73,7 @@ export function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean; setCo
                     <li key={i.href}>
                       <Link
                         href={i.href}
-                        data-tour={i.page === 'interventions' ? 'nav-interventions' : undefined}
+                        data-nav={i.page}
                         title={collapsed ? i.label : undefined}
                         aria-current={active ? 'page' : undefined}
                         className={cn('relative flex h-10 items-center gap-3 rounded-[10px] text-[14px] font-medium transition-colors', collapsed ? 'justify-center' : 'px-3', active ? 'text-white' : 'text-white/70 hover:bg-white/5 hover:text-white')}

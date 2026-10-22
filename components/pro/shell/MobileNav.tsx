@@ -26,12 +26,13 @@ export function MobileNav() {
       {can(role, 'demandes') && !pathname.startsWith('/pro/demandes') && (
         <Link
           href="/pro/demandes/nouvelle"
+          data-tour="new"
           className="pro-chrome fixed bottom-[84px] right-4 z-40 inline-flex h-12 items-center gap-2 rounded-full bg-signal pl-4 pr-5 text-[14.5px] font-bold text-navy shadow-[0_10px_24px_-8px_rgba(255,194,26,.9)] lg:hidden"
         >
           <Plus className="h-5 w-5" /> Demande
         </Link>
       )}
-      <nav className="pro-chrome fixed inset-x-0 bottom-0 z-40 border-t border-p-line bg-p-card pb-[env(safe-area-inset-bottom)] lg:hidden" aria-label="Navigation">
+      <nav data-tour="mobile-nav" className="pro-chrome fixed inset-x-0 bottom-0 z-40 border-t border-p-line bg-p-card pb-[env(safe-area-inset-bottom)] lg:hidden" aria-label="Navigation">
         <ul className="grid grid-cols-5">
           {tabs.map((t) => {
             const active = isActive(pathname, t.href);

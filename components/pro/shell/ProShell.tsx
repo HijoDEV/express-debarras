@@ -58,10 +58,7 @@ export function ProShell({ children }: { children: React.ReactNode }) {
   const counters = useMemo(() => (current ? getCounters() : { unreadMessages: 0, unreadNotifs: 0, toSign: 0 }), [current, rev]);
 
   const toggleTheme = useCallback(() => setPrefs({ theme: prefs.theme === 'dark' ? 'light' : 'dark' }), [prefs.theme, setPrefs]);
-  const startTour = useCallback(() => {
-    if (pathname !== '/pro') router.push('/pro');
-    setTimeout(() => setTour(true), pathname !== '/pro' ? 900 : 0);
-  }, [pathname, router]);
+  const startTour = useCallback(() => setTour(true), []);
 
   // visite guidée au premier login
   useEffect(() => {
@@ -157,6 +154,7 @@ export function ProShell({ children }: { children: React.ReactNode }) {
           </div>
           <Topbar />
           <main className="flex-1 px-4 pb-32 pt-5 sm:px-6 sm:pt-7 lg:px-8 lg:pb-12" id="pro-main">
+            <div id="pro-stage">
             <motion.div key={pathname} initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }} className="mx-auto w-full max-w-[1320px]">
               {allowed ? (
                 children
@@ -173,6 +171,7 @@ export function ProShell({ children }: { children: React.ReactNode }) {
                 />
               )}
             </motion.div>
+            </div>
           </main>
         </div>
         <MobileNav />

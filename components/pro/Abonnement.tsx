@@ -34,7 +34,7 @@ export function Abonnement() {
     <div>
       <PageHeader title="Abonnement" sub={`Offre actuelle : ${PRO.plans[ab.plan].label} · période du ${format(new Date(ab.period.start), 'd MMM', { locale: fr })} au ${format(new Date(ab.period.end), 'd MMM yyyy', { locale: fr })}`} />
       {ab.plan !== 'ponctuel' && (
-        <Card className="mb-4">
+        <Card className="mb-4" data-tour="abo-gauges">
           <CardHeader title="Consommation du mois" sub={`${eur(ab.monthlyHt)} HT / mois`} />
           <div className="grid gap-6 px-5 pb-5 pt-3 sm:grid-cols-2">
             <Gauge label="Passages" used={ab.used.passages} total={ab.included.passages} unit="" />
@@ -43,7 +43,7 @@ export function Abonnement() {
         </Card>
       )}
 
-      <div className="grid gap-3 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3" data-tour="abo-offers">
         {OFFERS.map((o) => {
           const current = o.plan === ab.plan;
           return (

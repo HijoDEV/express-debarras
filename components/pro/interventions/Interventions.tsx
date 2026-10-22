@@ -75,7 +75,7 @@ export function Interventions() {
         }
       />
 
-      <div className="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center">
+      <div className="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center" data-tour="int-views">
         <Segmented
           label="Vue"
           value={view}

@@ -138,7 +138,7 @@ export function FacturesList() {
   return (
     <div>
       <PageHeader title="Factures" sub="Export comptable et paiement par virement" actions={<Btn onClick={exportCsv} disabled={!data?.length}><Download className="h-4 w-4" /> Export CSV</Btn>} />
-      <div className="mb-4 grid gap-3 sm:grid-cols-3">
+      <div className="mb-4 grid gap-3 sm:grid-cols-3" data-tour="fac-kpis">
         {[
           { l: `Payé en ${year}`, v: sum((f) => f.status === 'payee' && new Date(f.issuedAt).getFullYear() === year), c: 'text-tri-dark dark:text-[#7FD9AF]' },
           { l: 'À payer', v: sum((f) => f.status === 'a_payer'), c: '' },
@@ -150,7 +150,7 @@ export function FacturesList() {
           </Card>
         ))}
       </div>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden" data-tour="fac-list">
         {error ? (
           <ErrorState message={error} onRetry={reload} />
         ) : loading ? (

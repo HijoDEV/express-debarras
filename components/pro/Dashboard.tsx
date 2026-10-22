@@ -145,7 +145,7 @@ export function Dashboard() {
             {loading || !data ? (
               <Skeleton className="h-[260px] rounded-[14px]" />
             ) : (
-              <Card>
+              <Card data-tour="abo">
                 <CardHeader title={data.abonnement.plan === 'ponctuel' ? 'Formule ponctuelle' : `Abonnement ${PRO.plans[data.abonnement.plan].label}`} sub={data.abonnement.plan === 'ponctuel' ? '45 € HT / m³ · forfait Box 220 € HT' : `${eur0(data.abonnement.monthlyHt)} HT / mois · consommation du mois`} action={<Btn size="sm" variant="ghost" href="/pro/abonnement">Gérer</Btn>} />
                 <div className="space-y-5 px-5 pb-5 pt-3">
                   {data.abonnement.plan === 'ponctuel' ? (
@@ -173,7 +173,7 @@ export function Dashboard() {
           </div>
 
           <div className="mt-4 grid gap-4 xl:grid-cols-[1.6fr_1fr]">
-            <Card>
+            <Card data-tour="chart">
               <CardHeader
                 title="Volume évacué par mois"
                 sub="12 derniers mois · m³"
@@ -210,7 +210,7 @@ export function Dashboard() {
               </div>
             </Card>
 
-            <Card>
+            <Card data-tour="activity">
               <CardHeader title="Activité récente" action={<Btn size="sm" variant="ghost" href="/pro/interventions">Tout voir</Btn>} />
               {loading || !data ? (
                 <div className="space-y-3 p-5">

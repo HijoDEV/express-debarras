@@ -59,7 +59,7 @@ export function SitesList() {
       ) : list.length === 0 ? (
         <Card><EmptyState title="Aucun site" text="Ajoutez vos biens un par un ou importez un fichier CSV." action={<Btn variant="primary" onClick={() => setImportOpen(true)}>Importer un CSV</Btn>} /></Card>
       ) : view === 'cards' ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div data-tour="sites-grid" className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {list.map((s, i) => {
             const I = ICON[s.kind];
             return (

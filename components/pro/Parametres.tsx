@@ -61,7 +61,7 @@ export function Parametres() {
           </form>
         </Card>
 
-        <Card>
+        <Card data-tour="notif-prefs">
           <CardHeader title="Notifications" sub="Choisissez le canal pour chaque événement" />
           <table className="mx-5 mb-5 mt-2 w-[calc(100%-40px)] text-[14px]">
             <thead>
@@ -114,7 +114,7 @@ export function Parametres() {
           </div>
         </Card>
 
-        <Card>
+        <Card data-tour="demo-tools">
           <CardHeader title="Démonstration" sub="Outils pour l’oral" />
           <div className="space-y-4 px-5 pb-5 pt-3">
             <div className="flex items-start justify-between gap-3">

@@ -50,7 +50,7 @@ export function Documents() {
           </Btn>
         }
       />
-      <div className="mb-4 grid gap-3 sm:grid-cols-3">
+      <div className="mb-4 grid gap-3 sm:grid-cols-3" data-tour="doc-kpis">
         <Card className="flex items-center gap-4 p-5">
           <div className="relative">
             <Ring pct={avg} />
@@ -71,7 +71,7 @@ export function Documents() {
         </Card>
       </div>
 
-      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between" data-tour="doc-tabs">
         <Segmented label="Type de document" value={tab} onChange={setTab} options={[{ value: 'rapports', label: `Rapports de tri (${rapports.length})` }, { value: 'bordereaux', label: `Bordereaux (${bordereaux.length})` }]} />
         <div className="flex gap-2">
           <select value={site} onChange={(e) => setSite(e.target.value)} className={cn(inputCls.replace('w-full', 'w-auto'), 'max-w-[220px]')} aria-label="Filtrer par site">

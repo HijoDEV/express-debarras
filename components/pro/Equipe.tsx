@@ -43,7 +43,7 @@ export function Equipe() {
   return (
     <div>
       <PageHeader title="Équipe" sub="Chaque rôle ne voit que ce qui le concerne." />
-      <Card className="mb-4 p-5">
+      <Card className="mb-4 p-5" data-tour="viewas">
         <p className="text-[15px] font-semibold">Voir en tant que</p>
         <p className="text-[13px] text-p-muted">Testez les permissions : les pages et boutons non autorisés disparaissent réellement.</p>
         <div className="mt-3 grid gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Voir en tant que">
