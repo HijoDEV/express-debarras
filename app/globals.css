@@ -85,6 +85,7 @@
   background: var(--p-bg);
 }
 .pro.dark {
+  --p-bar2: #8FB3C9;
   --p-bg: #0B1620;
   --p-card: #102231;
   --p-line: #1F3549;

@@ -91,7 +91,7 @@ export function Interventions() {
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-p-muted" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Référence, site, adresse" className={cn(inputCls, 'pl-9')} aria-label="Rechercher" />
           </div>
-          <select value={status} onChange={(e) => setStatus(e.target.value as typeof status)} className={cn(inputCls, 'w-auto')} aria-label="Filtrer par statut">
+          <select value={status} onChange={(e) => setStatus(e.target.value as typeof status)} className={inputCls.replace('w-full', 'w-auto')} aria-label="Filtrer par statut">
             <option value="all">Tous les statuts</option>
             <option value="upcoming">En cours et à venir</option>
             {(Object.keys(STATUS_META) as Status[]).map((s) => (
@@ -100,7 +100,7 @@ export function Interventions() {
               </option>
             ))}
           </select>
-          <select value={site} onChange={(e) => setSite(e.target.value)} className={cn(inputCls, 'w-auto max-w-[200px]')} aria-label="Filtrer par site">
+          <select value={site} onChange={(e) => setSite(e.target.value)} className={cn(inputCls.replace('w-full', 'w-auto'), 'max-w-[200px]')} aria-label="Filtrer par site">
             <option value="all">Tous les sites</option>
             {sites.map(([id, l]) => (
               <option key={id} value={id}>
@@ -108,7 +108,7 @@ export function Interventions() {
               </option>
             ))}
           </select>
-          <select value={period} onChange={(e) => setPeriod(e.target.value as typeof period)} className={cn(inputCls, 'w-auto')} aria-label="Période">
+          <select value={period} onChange={(e) => setPeriod(e.target.value as typeof period)} className={inputCls.replace('w-full', 'w-auto')} aria-label="Période">
             <option value="all">12 mois</option>
             <option value="3">3 derniers mois</option>
             <option value="6">6 derniers mois</option>

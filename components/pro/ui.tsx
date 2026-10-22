@@ -261,14 +261,14 @@ export function Modal({ open, onClose, title, children, wide = false }: { open: 
 /* ---------- Divers ---------- */
 export function Segmented<T extends string>({ value, onChange, options, label }: { value: T; onChange: (v: T) => void; options: { value: T; label: React.ReactNode }[]; label: string }) {
   return (
-    <div className="inline-flex rounded-[10px] border border-p-line bg-p-soft p-0.5" role="tablist" aria-label={label}>
+    <div className="pro-scroll inline-flex max-w-full overflow-x-auto rounded-[10px] border border-p-line bg-p-soft p-0.5" role="tablist" aria-label={label}>
       {options.map((o) => (
         <button
           key={o.value}
           role="tab"
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
-          className={cn('relative inline-flex h-8 items-center gap-1.5 rounded-[8px] px-3 text-[13px] font-semibold transition-colors', value === o.value ? 'text-p-text' : 'text-p-muted hover:text-p-text')}
+          className={cn('relative inline-flex h-8 shrink-0 whitespace-nowrap items-center gap-1.5 rounded-[8px] px-3 text-[13px] font-semibold transition-colors', value === o.value ? 'text-p-text' : 'text-p-muted hover:text-p-text')}
         >
           {value === o.value && <motion.span layoutId={`seg-${label}`} className="absolute inset-0 rounded-[8px] bg-p-card shadow-sm" transition={{ type: 'spring', stiffness: 450, damping: 34 }} />}
           <span className="relative inline-flex items-center gap-1.5">{o.label}</span>
