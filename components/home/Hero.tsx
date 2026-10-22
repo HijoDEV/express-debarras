@@ -3,26 +3,25 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Illus } from '@/components/illus/Illus';
-import { ButtonLink } from '@/components/ui/Button';
+import { ArrowRight, Camera, Check } from 'lucide-react';
 import { HazardStripe } from '@/components/ui/HazardStripe';
-import { SITUATIONS, type IllusId, type SituationId } from '@/lib/data';
+import { BRAND, SITUATIONS, type IllusId, type SituationId } from '@/lib/data';
 import { EASE } from '@/lib/motion';
 import { prefillSim } from '@/lib/sim-store';
 import { scrollToEl } from '@/lib/scroll';
 import { PhoneChat } from './PhoneChat';
+import { HeroTruck } from './HeroTruck';
 
 const LINES = ['Vos affaires vous encombrent.', 'Pas besoin de déchetterie.'];
 
 type Tile = { id: IllusId; x: string; y: string; size: number; r: number; depth: number; back?: boolean; dur: number; delay: number; label: string };
 const TILES: Tile[] = [
-  { id: 'sofa', label: 'Canapé', x: '3%', y: '50%', size: 92, r: -8, depth: 26, dur: 7, delay: 0 },
-  { id: 'fridge', label: 'Réfrigérateur', x: '88%', y: '46%', size: 86, r: 7, depth: 22, dur: 8.5, delay: -2 },
-  { id: 'box', label: 'Carton', x: '12%', y: '74%', size: 80, r: 6, depth: 30, dur: 9, delay: -4 },
-  { id: 'mattress', label: 'Matelas', x: '80%', y: '72%', size: 84, r: -6, depth: 24, dur: 6.5, delay: -1 },
-  { id: 'bike', label: 'Vélo', x: '20%', y: '0%', size: 58, r: 10, depth: 10, back: true, dur: 10, delay: -3 },
-  { id: 'lamp', label: 'Lampe', x: '74%', y: '-1%', size: 54, r: -12, depth: 8, back: true, dur: 9.5, delay: -6 },
-  { id: 'wardrobe', label: 'Armoire', x: '24%', y: '56%', size: 52, r: 12, depth: 8, back: true, dur: 8, delay: -5 },
-  { id: 'tv', label: 'Télévision', x: '68%', y: '58%', size: 56, r: -9, depth: 12, back: true, dur: 7.5, delay: -2.5 },
+  { id: 'sofa', label: 'Canapé', x: '1%', y: '360px', size: 124, r: -8, depth: 26, dur: 7, delay: 0 },
+  { id: 'fridge', label: 'Réfrigérateur', x: '88%', y: '320px', size: 112, r: 7, depth: 22, dur: 8.5, delay: -2 },
+  { id: 'box', label: 'Carton', x: '10%', y: '560px', size: 104, r: 6, depth: 30, dur: 9, delay: -4 },
+  { id: 'mattress', label: 'Matelas', x: '80%', y: '540px', size: 108, r: -6, depth: 24, dur: 6.5, delay: -1 },
+  { id: 'bike', label: 'Vélo', x: '18%', y: '-6px', size: 74, r: 10, depth: 10, back: true, dur: 10, delay: -3 },
+  { id: 'lamp', label: 'Lampe', x: '74%', y: '-14px', size: 70, r: -12, depth: 8, back: true, dur: 9.5, delay: -6 },
 ];
 
 function FloatingTile({ t, mx, my }: { t: Tile; mx: MotionValue<number>; my: MotionValue<number> }) {
@@ -31,7 +30,7 @@ function FloatingTile({ t, mx, my }: { t: Tile; mx: MotionValue<number>; my: Mot
   return (
     <motion.div
       aria-hidden
-      className="absolute hidden md:block"
+      className="pointer-events-auto absolute hidden md:block"
       style={{ left: t.x, top: t.y, x, y, zIndex: t.back ? 0 : 2 }}
       initial={{ opacity: 0, scale: 0.6 }}
       animate={{ opacity: t.back ? 0.55 : 1, scale: 1 }}
@@ -41,16 +40,18 @@ function FloatingTile({ t, mx, my }: { t: Tile; mx: MotionValue<number>; my: Mot
         className="animate-float"
         style={{ ['--dur' as string]: `${t.dur}s`, ['--r' as string]: `${t.r}deg`, animationDelay: `${t.delay}s` } as React.CSSProperties}
       >
-        <div
-          className="grid place-items-center rounded-[26%] bg-white shadow-lift ring-1 ring-navy/5"
+        <motion.div
+          whileHover={{ rotate: [0, -8, 7, -4, 0], scale: 1.12 }}
+          transition={{ duration: 0.6 }}
+          className="grid cursor-grab place-items-center rounded-[28%] bg-white shadow-lift ring-1 ring-navy/5"
           style={{
             width: `clamp(${Math.round(t.size * 0.62)}px, ${t.size / 12}vw, ${t.size}px)`,
             height: `clamp(${Math.round(t.size * 0.62)}px, ${t.size / 12}vw, ${t.size}px)`,
             filter: t.back ? 'blur(1.5px)' : undefined,
           }}
         >
-          <Illus id={t.id} className="h-[68%] w-[68%]" />
-        </div>
+          <Illus id={t.id} className="h-[84%] w-[84%]" />
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -119,10 +120,10 @@ export function Hero() {
                 initial={reduce ? false : { opacity: 0, y: 12, scale: 0.8 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ delay: 0.3 + i * 0.08, duration: 0.6, ease: EASE }}
-                className="animate-float grid h-12 w-12 place-items-center rounded-2xl bg-white shadow-soft ring-1 ring-navy/5"
+                className="animate-float grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-soft ring-1 ring-navy/5"
                 style={{ ['--dur' as string]: `${6 + i * 1.3}s`, ['--r' as string]: `${[-8, 6, -4, 8][i]}deg`, animationDelay: `${-i}s` } as React.CSSProperties}
               >
-                <Illus id={id} className="h-8 w-8" />
+                <Illus id={id} className="h-11 w-11" />
               </motion.span>
             ))}
           </div>
@@ -149,11 +150,37 @@ export function Hero() {
             <strong className="font-semibold text-navy">sous 48 h</strong>.
           </p>
 
-          <div style={{ animationDelay: '1s' }} className="anim-fade-up mt-8 flex flex-col items-center gap-3">
-            <ButtonLink href="#simulateur" arrow className="px-8">
-              Estimer mon prix
-            </ButtonLink>
-            <p className="text-[13.5px] text-navy/70">Gratuit · sans engagement · réponse en 1 h</p>
+          <div style={{ animationDelay: '1s' }} className="anim-fade-up mt-9 flex flex-col items-center gap-4">
+            <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+              <a
+                href="#simulateur"
+                className="btn-shine group inline-flex h-16 w-full items-center justify-center gap-2.5 rounded-btn bg-signal px-9 text-[17px] font-bold text-navy shadow-signal transition-all duration-300 hover:-translate-y-1 hover:shadow-signal-lg sm:w-auto"
+              >
+                Obtenir mon prix gratuit
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-navy text-signal transition-transform duration-300 group-hover:translate-x-1">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </a>
+              <a
+                href={`https://wa.me/33${BRAND.whatsapp.replace(/\s/g, '').slice(1)}?text=${encodeURIComponent('Bonjour, voici mes photos pour un débarras :')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex h-16 w-full items-center justify-center gap-2.5 rounded-btn bg-white px-6 text-[16px] font-semibold text-navy ring-1 ring-inset ring-navy/15 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:ring-navy/40 sm:w-auto"
+              >
+                <span className="relative grid h-8 w-8 place-items-center rounded-full bg-tri text-white">
+                  <span className="ping-soft absolute inset-0 rounded-full bg-tri" />
+                  <Camera className="relative h-4 w-4" />
+                </span>
+                Envoyer une photo
+              </a>
+            </div>
+            <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[13.5px] font-medium text-navy/70">
+              {['Gratuit', 'Sans engagement', 'Prix fixe en 1 h'].map((x) => (
+                <span key={x} className="inline-flex items-center gap-1.5">
+                  <Check className="h-4 w-4 text-tri-dark" strokeWidth={3} /> {x}
+                </span>
+              ))}
+            </p>
           </div>
 
           <div
@@ -178,6 +205,7 @@ export function Hero() {
               ))}
             </div>
           </div>
+          <HeroTruck />
         </div>
       </div>
 

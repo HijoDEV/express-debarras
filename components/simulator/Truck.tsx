@@ -28,12 +28,16 @@ const PIECE_FILL = {
   appliance: { fill: '#F1F4F6', stroke: 'rgba(14,42,59,.22)' },
 };
 
-function Wheel({ cx, cy, spin }: { cx: number; cy: number; spin: number }) {
+function Wheel({ cx, cy, spin, driving }: { cx: number; cy: number; spin: number; driving?: boolean }) {
   return (
     <g>
       <circle cx={cx} cy={cy} r={27} fill="#0B1F2B" />
       <circle cx={cx} cy={cy} r={22} fill="#1B2B36" />
-      <motion.g animate={{ rotate: spin }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} style={{ originX: `${cx}px`, originY: `${cy}px` }}>
+      <motion.g
+        animate={driving ? { rotate: [spin, spin + 360] } : { rotate: spin }}
+        transition={driving ? { duration: 0.6, ease: 'linear', repeat: Infinity } : { duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        style={{ originX: `${cx}px`, originY: `${cy}px` }}
+      >
         <circle cx={cx} cy={cy} r={15} fill="#D9DEE2" />
         <circle cx={cx} cy={cy} r={15} fill="none" stroke="#B5BDC3" strokeWidth={2} />
         {[0, 72, 144, 216, 288].map((a) => (
@@ -45,7 +49,23 @@ function Wheel({ cx, cy, spin }: { cx: number; cy: number; spin: number }) {
   );
 }
 
-export function Truck({ items, rooms, volume, compact = false, className }: { items: Record<string, number>; rooms: Record<string, number>; volume: number; compact?: boolean; className?: string }) {
+export function Truck({
+  items,
+  rooms,
+  volume,
+  compact = false,
+  bare = false,
+  driving = false,
+  className,
+}: {
+  items: Record<string, number>;
+  rooms: Record<string, number>;
+  volume: number;
+  compact?: boolean;
+  bare?: boolean;
+  driving?: boolean;
+  className?: string;
+}) {
   const reduce = useReducedMotion();
   const uid = useId().replace(/:/g, '');
   const { placed } = useMemo(() => pack(buildPieces(items, rooms)), [items, rooms]);
@@ -73,7 +93,7 @@ export function Truck({ items, rooms, volume, compact = false, className }: { it
   const sag = reduce ? 0 : pct * 5;
 
   return (
-    <div className={cn('relative', compact ? 'pt-6' : 'pt-7 sm:pt-2', className)}>
+    <div className={cn('relative', bare ? '' : compact ? 'pt-6' : 'pt-7 sm:pt-2', className)}>
       <svg viewBox="0 0 720 300" className="h-auto w-full" role="img" aria-label={`Camion de 20 m³ rempli à ${Math.round(pct * 100)} %`}>
         <defs>
           <pattern id={`hz-${uid}`} width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -186,7 +206,7 @@ export function Truck({ items, rooms, volume, compact = false, className }: { it
 
             </g>
             <rect x={IN_X} y={IN_Y} width={IN_W} height={IN_H} rx={4} fill="none" stroke="rgba(14,42,59,.18)" strokeWidth={1.5} />
-            {placed.length === 0 && (
+            {placed.length === 0 && !bare && (
               <text x={IN_X + IN_W / 2} y={IN_Y + IN_H / 2 + 5} textAnchor="middle" fill="rgba(14,42,59,.45)" style={{ fontFamily: 'var(--font-inter)', fontSize: 14, fontWeight: 600 }}>
                 Ajoutez des objets : ils se chargent ici
               </text>
@@ -278,7 +298,7 @@ export function Truck({ items, rooms, volume, compact = false, className }: { it
 
           {/* roues (non affaissées) */}
           {WHEELS.map((w) => (
-            <Wheel key={w.cx} cx={w.cx} cy={w.cy} spin={spin} />
+            <Wheel key={w.cx} cx={w.cx} cy={w.cy} spin={spin} driving={driving} />
           ))}
 
           {/* gaz d'échappement à chaque ajout */}
@@ -301,6 +321,7 @@ export function Truck({ items, rooms, volume, compact = false, className }: { it
       </svg>
 
       {/* étiquettes */}
+      {!bare && (
       <div className={cn('pointer-events-none absolute flex items-center gap-1.5', compact ? 'right-1 top-0' : 'right-0 top-0')}>
         <motion.span
           key={full ? 'full' : 'ok'}
@@ -308,15 +329,16 @@ export function Truck({ items, rooms, volume, compact = false, className }: { it
           animate={{ scale: 1, opacity: 1 }}
           className={cn('rounded-full px-2.5 py-1 font-mono font-semibold shadow-soft', compact ? 'text-[10px]' : 'text-[11.5px]', full ? 'bg-[#B4442A] text-white' : 'bg-white text-navy ring-1 ring-line')}
         >
-          {full ? `Plein · ${rotations} rotations` : `${Math.round(pct * 100)} %`}
+          {full ? `${fmtVol(Math.round(volume * 10) / 10)} · ${rotations} rotations` : `${fmtVol(Math.round(volume * 10) / 10)} · ${Math.round(pct * 100)} %`}
         </motion.span>
       </div>
-      {!compact && (
+      )}
+      {!compact && !bare && (
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[13px] text-navy/70">
           <span>
             Camion de 20 m³ · <strong className="text-navy">{full ? `${rotations} allers-retours` : `reste ${fmtVol(Math.max(0, Math.round((TRUCK_M3 - volume) * 10) / 10))}`}</strong>
           </span>
-          <span className="inline-flex items-center gap-1.5">
+          <span className="hidden items-center gap-1.5 sm:inline-flex">
             <span className="h-2 w-2 rounded-full bg-tri" /> Chargé de l’avant vers l’arrière, objets lourds au plancher
           </span>
         </div>

@@ -19,6 +19,14 @@ const SIT_ILLUS: Record<string, IllusId> = { meuble: 'armchair', objets: 'box', 
 
 const eur = (n: number) => fmtEur(n);
 
+const CATS: { label: string; ids: string[] | null }[] = [
+  { label: 'Tout', ids: null },
+  { label: 'Salon', ids: ['canape3', 'canape2', 'fauteuil', 'table4', 'buffet', 'biblio', 'tv'] },
+  { label: 'Chambre', ids: ['litdouble', 'litsimple', 'matelas', 'armoire3', 'armoire2', 'commode'] },
+  { label: 'Cuisine', ids: ['frigo', 'lavelinge', 'cuisiniere'] },
+  { label: 'Cave et divers', ids: ['velo', 'bureau', 'carton', 'sac'] },
+];
+
 /* ---------- Code postal ---------- */
 function locate(cp: string): { kind: 'empty' | 'metro' | 'known' | 'unknown'; city?: string; km?: number } {
   if (!/^\d{5}$/.test(cp)) return { kind: 'empty' };
@@ -114,34 +122,59 @@ export function Simulator({ fullPage = false }: { fullPage?: boolean }) {
   const showSummary = sim.step >= 1 && sim.step <= 4;
   const isLocal = sim.situation === 'local';
 
+  const items = sim.mode === 'items' ? sim.items : {};
+  const rooms = sim.mode === 'rooms' ? sim.rooms : {};
+  const wide = sim.step <= 4;
+
   return (
     <div ref={top} className="relative">
-      <div className={cn('grid gap-6', showSummary && 'lg:grid-cols-[1fr_340px]')}>
-        {/* ---------- Carte principale ---------- */}
-        <div className="relative min-w-0 overflow-hidden rounded-[28px] bg-white shadow-lift ring-1 ring-line">
-          {sim.step <= 4 && (
-            <div className="border-b border-line px-5 pb-4 pt-5 sm:px-8 sm:pt-7">
-              <div className="flex items-center justify-between gap-3">
-                <p className="font-mono text-label uppercase text-beton-600">
-                  Étape {sim.step + 1} / 5 · <span className="text-navy">{STEP_LABELS[sim.step]}</span>
-                </p>
-                {(sim.step > 0 || sim.situation) && (
-                  <button onClick={reset} className="inline-flex items-center gap-1.5 text-[13px] font-medium text-navy/70 hover:text-navy">
-                    <RotateCcw className="h-3.5 w-3.5" /> Recommencer
+      {/* ---------- Étapes ---------- */}
+      {sim.step <= 4 && (
+        <div className="mb-5 flex items-center gap-2 overflow-x-auto no-scrollbar sm:mb-6">
+          <ol className="flex min-w-max flex-1 items-center gap-1.5 rounded-full bg-white p-1.5 shadow-soft ring-1 ring-line" aria-label="Étapes du simulateur">
+            {STEP_LABELS.map((l, i) => {
+              const done = i < sim.step;
+              const cur = i === sim.step;
+              return (
+                <li key={l} className="flex-1">
+                  <button
+                    onClick={() => done && go(i)}
+                    disabled={!done}
+                    aria-current={cur ? 'step' : undefined}
+                    className={cn(
+                      'relative flex h-10 w-full items-center justify-center gap-2 rounded-full px-3 text-[13.5px] font-semibold transition-colors',
+                      cur ? 'text-navy' : done ? 'text-navy/80 hover:bg-kraft' : 'text-navy/50',
+                    )}
+                  >
+                    {cur && <motion.span layoutId="step-pill" className="absolute inset-0 rounded-full bg-signal shadow-signal" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
+                    <span className={cn('relative grid h-5 w-5 place-items-center rounded-full font-mono text-[10.5px]', done ? 'bg-tri text-white' : cur ? 'bg-navy text-signal' : 'bg-kraft')}>
+                      {done ? <Check className="h-3 w-3" strokeWidth={3} /> : i + 1}
+                    </span>
+                    <span className={cn('relative', !cur && 'hidden md:inline')}>{l}</span>
                   </button>
-                )}
-              </div>
-              <div className="mt-3 grid grid-cols-5 gap-1.5" aria-hidden>
-                {STEP_LABELS.map((l, i) => (
-                  <div key={l} className="h-1.5 overflow-hidden rounded-full bg-kraft">
-                    <motion.div className="h-full rounded-full bg-signal" initial={false} animate={{ width: i <= sim.step ? '100%' : '0%' }} transition={{ duration: 0.5 }} />
-                  </div>
-                ))}
-              </div>
-            </div>
+                </li>
+              );
+            })}
+          </ol>
+          {(sim.step > 0 || sim.situation) && (
+            <button onClick={reset} aria-label="Recommencer" className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-full bg-white text-navy/70 shadow-soft ring-1 ring-line hover:text-navy">
+              <RotateCcw className="h-4 w-4" />
+            </button>
           )}
+        </div>
+      )}
 
-          <div className={cn('relative px-5 py-6 sm:px-8 sm:py-8', fullPage ? 'min-h-[520px]' : 'min-h-[480px]')}>
+      <div className={cn('grid items-start gap-5 lg:gap-6', wide ? 'lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)]' : 'mx-auto max-w-[760px]')}>
+        {/* ---------- Scène : camion + prix en direct ---------- */}
+        {wide && (
+          <div className="lg:sticky lg:top-24">
+            <Stage quote={quote} items={items} rooms={rooms} step={sim.step} />
+          </div>
+        )}
+
+        {/* ---------- Panneau de l'étape ---------- */}
+        <div className="relative min-w-0 overflow-hidden rounded-[28px] bg-white shadow-lift ring-1 ring-line">
+          <div className={cn('relative px-5 py-6 sm:px-7 sm:py-7', fullPage ? 'min-h-[520px]' : 'min-h-[480px]')}>
             <AnimatePresence mode="wait" custom={dir} initial={false}>
               <motion.div
                 key={hydrated ? sim.step : 'ssr'}
@@ -191,14 +224,14 @@ export function Simulator({ fullPage = false }: { fullPage?: boolean }) {
           </div>
 
           {sim.step >= 1 && sim.step <= 3 && (
-            <div className="flex items-center justify-between gap-3 border-t border-line bg-kraft/60 px-5 py-4 sm:px-8">
-              <button onClick={() => go(sim.step - 1)} className="inline-flex h-12 items-center gap-2 rounded-btn px-3 text-[15px] font-semibold text-navy hover:bg-white">
+            <div className="sticky bottom-0 z-10 hidden items-center justify-between gap-3 border-t border-line bg-white/95 px-5 py-4 backdrop-blur sm:px-7 lg:flex">
+              <button onClick={() => go(sim.step - 1)} className="inline-flex h-12 items-center gap-2 rounded-btn px-3 text-[15px] font-semibold text-navy hover:bg-kraft">
                 <ArrowLeft className="h-4 w-4" /> Retour
               </button>
               <button
                 onClick={() => go(sim.step + 1)}
                 disabled={!canNext}
-                className="group inline-flex h-12 items-center gap-2 rounded-btn bg-navy px-5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lift disabled:opacity-40 disabled:hover:translate-y-0"
+                className="btn-shine group inline-flex h-12 items-center gap-2 rounded-btn bg-signal px-6 text-[15.5px] font-bold text-navy shadow-signal transition hover:-translate-y-0.5 disabled:opacity-40 disabled:shadow-none disabled:hover:translate-y-0"
               >
                 {sim.step === 3 ? 'Voir mon prix' : 'Continuer'}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -206,47 +239,38 @@ export function Simulator({ fullPage = false }: { fullPage?: boolean }) {
             </div>
           )}
           {sim.step === 4 && (
-            <div className="border-t border-line bg-kraft/60 px-5 py-4 sm:px-8">
+            <div className="border-t border-line bg-kraft/60 px-5 py-4 sm:px-7">
               <button onClick={() => go(3)} className="inline-flex h-12 items-center gap-2 rounded-btn px-3 text-[15px] font-semibold text-navy hover:bg-white">
                 <ArrowLeft className="h-4 w-4" /> Modifier
               </button>
             </div>
           )}
         </div>
-
-        {/* ---------- Récapitulatif desktop ---------- */}
-        {showSummary && (
-          <aside className="hidden lg:block" aria-label="Récapitulatif du prix">
-            <div className="sticky top-28 space-y-4">
-              {sim.step > 1 && (
-                <div className="rounded-[24px] bg-white p-3 pt-4 shadow-soft ring-1 ring-line">
-                  <Truck compact volume={quote.volume} items={sim.mode === 'items' ? sim.items : {}} rooms={sim.mode === 'rooms' ? sim.rooms : {}} />
-                </div>
-              )}
-              <Summary quote={quote} />
-            </div>
-          </aside>
-        )}
       </div>
 
       {/* ---------- Barre mobile collante ---------- */}
       {showSummary && (
         <div className="sticky bottom-3 z-30 mt-4 lg:hidden">
-          <div className="on-dark flex items-center justify-between gap-3 rounded-2xl bg-navy px-4 py-3 text-white shadow-lift">
-            <div className="min-w-0">
-              <p className="truncate text-[12px] text-white/60">
+          <div className="on-dark flex items-center gap-3 rounded-2xl bg-navy p-2.5 pl-3 text-white shadow-lift">
+            {sim.step > 1 && (
+              <button onClick={() => go(sim.step - 1)} aria-label="Étape précédente" className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10">
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+            )}
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[12px] text-white/70">
                 {quote.formula ? quote.formulaName : 'Votre estimation'} · {fmtVol(quote.volume)}
               </p>
               <p className="font-display text-[24px] leading-none tight">
-                <Counter value={quote.total} format={(n) => eur(Math.round(n))} /> <span className="font-sans text-[12px] font-medium text-white/60">TTC</span>
+                <Counter value={quote.total} format={(n) => eur(Math.round(n))} /> <span className="font-sans text-[12px] font-medium text-white/70">TTC</span>
               </p>
             </div>
             {sim.step < 4 ? (
-              <button onClick={() => go(sim.step + 1)} disabled={!canNext} className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-btn bg-signal px-4 text-[14.5px] font-semibold text-navy disabled:opacity-40">
+              <button onClick={() => go(sim.step + 1)} disabled={!canNext} className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-xl bg-signal px-4 text-[14.5px] font-bold text-navy disabled:opacity-40">
                 {sim.step === 3 ? 'Mon prix' : 'Continuer'} <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
-              <button onClick={() => go(5)} className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-btn bg-signal px-4 text-[14.5px] font-semibold text-navy">
+              <button onClick={() => go(5)} className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-xl bg-signal px-4 text-[14.5px] font-bold text-navy">
                 Réserver <ArrowRight className="h-4 w-4" />
               </button>
             )}
@@ -259,29 +283,58 @@ export function Simulator({ fullPage = false }: { fullPage?: boolean }) {
 
 /* ====================================================================== */
 
-function Summary({ quote }: { quote: Quote }) {
+/** Scène permanente : le camion se charge, le prix suit en direct. */
+function Stage({ quote, items, rooms, step }: { quote: Quote; items: Record<string, number>; rooms: Record<string, number>; step: number }) {
+  const [open, setOpen] = useState(false);
+  const showLines = quote.lines.length > 0 && (open || step >= 2);
   return (
-    <div className="on-dark overflow-hidden rounded-[28px] bg-navy text-white shadow-lift">
-      <div className="p-6">
-        <p className="font-mono text-label uppercase text-signal">Votre estimation</p>
-        <p className="mt-3 text-[15px] text-white/70">{quote.formula ? quote.formulaName : 'Ajoutez vos objets'}</p>
-        <p className="mt-1 font-display text-[48px] leading-none tight">
-          <Counter value={quote.total} format={(n) => eur(Math.round(n))} />
-        </p>
-        <p className="mt-2 text-[13px] text-white/60">TTC · volume estimé {fmtVol(quote.volume)}</p>
+    <div className="overflow-hidden rounded-[28px] bg-white shadow-lift ring-1 ring-line">
+      <div className="relative bg-[linear-gradient(180deg,#FFF8E1_0%,#F5F2EA_100%)] px-4 pb-3 pt-4 sm:px-6 sm:pt-5">
+        <p className="absolute left-4 top-4 font-mono text-label uppercase text-beton-600 sm:left-6 sm:top-5">Votre camion · 20 m³</p>
+        <Truck volume={quote.volume} items={items} rooms={rooms} />
+        {step === 0 && <p className="pb-1 text-center text-[13.5px] font-medium text-navy/70">Choisissez votre situation : le camion se charge au fil de vos réponses.</p>}
       </div>
-      {quote.lines.length > 0 && (
-        <ul className="space-y-2 border-t border-white/10 px-6 py-5 text-[13.5px]">
-          {quote.lines.map((l) => (
-            <li key={l.label} className="flex justify-between gap-3">
-              <span className="text-white/75">{l.label}</span>
-              <span className="shrink-0 tabular-nums">{fmtEur(l.amount, l.amount % 1 !== 0)}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="flex items-center gap-2 border-t border-white/10 bg-white/5 px-6 py-4 text-[12.5px] text-white/70">
-        <ShieldCheck className="h-4 w-4 shrink-0 text-signal" /> Prix ferme après validation de vos photos
+
+      <div className="on-dark hidden bg-navy px-5 py-5 text-white sm:px-6 lg:block">
+        <div className="flex items-end justify-between gap-4">
+          <div className="min-w-0">
+            <p className="font-mono text-label uppercase text-signal">Votre estimation</p>
+            <AnimatePresence mode="wait">
+              <motion.p key={quote.formulaName} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} className="mt-2 truncate text-[15px] text-white/80">
+                {quote.formula ? quote.formulaName : 'Ajoutez vos objets'}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+          <p className="shrink-0 text-right font-display text-[44px] leading-none tight text-signal sm:text-[52px]">
+            <Counter value={quote.total} format={(n) => eur(Math.round(n))} />
+            <span className="ml-1.5 font-sans text-[13px] font-medium text-white/70">TTC</span>
+          </p>
+        </div>
+        {quote.lines.length > 0 && step < 2 && (
+          <button onClick={() => setOpen((o) => !o)} className="mt-3 text-[13px] font-semibold text-white/80 underline underline-offset-4 hover:text-white">
+            {open ? 'Masquer le détail' : 'Voir le détail du prix'}
+          </button>
+        )}
+        <AnimatePresence initial={false}>
+          {showLines && (
+            <motion.ul
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="mt-4 space-y-2 overflow-hidden border-t border-white/10 pt-4 text-[13.5px]"
+            >
+              {quote.lines.map((l) => (
+                <motion.li layout key={l.label} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} className="flex justify-between gap-3">
+                  <span className="text-white/80">{l.label}</span>
+                  <span className="shrink-0 tabular-nums">{fmtEur(l.amount, l.amount % 1 !== 0)}</span>
+                </motion.li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
+        <p className="mt-4 flex items-center gap-2 border-t border-white/10 pt-3 text-[12.5px] text-white/75">
+          <ShieldCheck className="h-4 w-4 shrink-0 text-signal" /> Prix ferme après validation de vos photos · acompte 30 %
+        </p>
       </div>
     </div>
   );
@@ -321,6 +374,7 @@ function StepContent({
   setPhotos: React.Dispatch<React.SetStateAction<{ url: string; name: string }[]>>;
 }) {
   const [drag, setDrag] = useState(false);
+  const [cat, setCat] = useState(CATS[0].label);
   const input = useRef<HTMLInputElement>(null);
   const addFiles = (files: FileList | null) => {
     if (!files) return;
@@ -357,23 +411,67 @@ function StepContent({
       </div>
 
       {sim.mode === 'items' ? (
-        <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {ITEMS.map((it) => {
-            const n = sim.items[it.id] ?? 0;
-            return (
-              <div key={it.id} className={cn('flex items-center gap-3 rounded-2xl p-2.5 pr-3 ring-1 transition', n > 0 ? 'bg-signal-soft ring-signal' : 'bg-white ring-line')}>
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-kraft">
-                  <Illus id={it.illus} className="h-8 w-8" />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[14.5px] font-semibold">{it.name}</span>
-                  <span className="text-[12.5px] text-navy/70">{fmtVol(it.volume)}</span>
-                </span>
-                <Stepper size="sm" value={n} onChange={(v) => setItem(it.id, v)} label={it.name} max={50} />
-              </div>
-            );
-          })}
-        </div>
+        <>
+          <div className="mt-5 flex gap-1.5 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Catégories">
+            {CATS.map((c) => {
+              const n = ITEMS.filter((it) => c.ids === null || c.ids.includes(it.id)).reduce((s2, it) => s2 + (sim.items[it.id] ?? 0), 0);
+              return (
+                <button
+                  key={c.label}
+                  role="tab"
+                  aria-selected={cat === c.label}
+                  onClick={() => setCat(c.label)}
+                  className={cn('inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold transition-colors', cat === c.label ? 'bg-navy text-white' : 'bg-kraft text-navy hover:bg-line')}
+                >
+                  {c.label}
+                  {n > 0 && <span className={cn('grid h-5 min-w-5 place-items-center rounded-full px-1 text-[11px]', cat === c.label ? 'bg-signal text-navy' : 'bg-navy text-white')}>{n}</span>}
+                </button>
+              );
+            })}
+          </div>
+          <motion.div layout className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+            <AnimatePresence initial={false}>
+              {ITEMS.filter((it) => {
+                const c = CATS.find((x) => x.label === cat)!;
+                return c.ids === null || c.ids.includes(it.id);
+              }).map((it) => {
+                const n = sim.items[it.id] ?? 0;
+                return (
+                  <motion.div
+                    key={it.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.92 }}
+                    transition={{ duration: 0.22 }}
+                    className={cn('group relative flex flex-col rounded-2xl p-2.5 ring-1 transition-shadow', n > 0 ? 'bg-signal-soft ring-2 ring-signal' : 'bg-white ring-line hover:shadow-soft hover:ring-navy/25')}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setItem(it.id, Math.min(50, n + 1))}
+                      aria-label={`Ajouter · ${it.name}`}
+                      className="flex flex-col items-center rounded-xl pb-1 pt-1.5 text-center"
+                    >
+                      <motion.span key={n} initial={n > 0 ? { scale: 0.8, rotate: -6 } : false} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 500, damping: 14 }} className="grid h-16 w-16 place-items-center">
+                        <Illus id={it.illus} className="h-16 w-16 transition-transform duration-300 group-hover:-translate-y-1" />
+                      </motion.span>
+                      <span className="mt-1 line-clamp-2 min-h-[2.4em] text-[13.5px] font-semibold leading-tight">{it.name}</span>
+                      <span className="mt-0.5 font-mono text-[11px] text-navy/70">{fmtVol(it.volume)}</span>
+                    </button>
+                    <div className="mt-1.5 flex justify-center">
+                      <Stepper size="sm" value={n} onChange={(v) => setItem(it.id, v)} label={it.name} max={50} />
+                    </div>
+                    {n > 0 && (
+                      <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute right-2 top-2 grid h-6 min-w-6 place-items-center rounded-full bg-navy px-1.5 text-[12px] font-bold text-white">
+                        {n}
+                      </motion.span>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        </>
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
           {ROOMS.map((r) => {
@@ -391,24 +489,11 @@ function StepContent({
         </div>
       )}
 
-      {/* Volume + camion */}
-      <div className="mt-6 overflow-hidden rounded-2xl bg-kraft p-4 sm:p-5">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="font-mono text-label uppercase text-beton-600">Volume total</p>
-            <p className="mt-1 font-display text-[34px] leading-none tight">
-              <Counter value={quote.volume} format={(n) => fmtVol(Math.round(n * 10) / 10)} duration={0.5} />
-            </p>
-          </div>
-          {quote.eligibleObjet && <p className="rounded-full bg-tri-soft px-3 py-1 text-[13px] font-medium text-tri-dark">Éligible Express Objet · dès 49 €</p>}
-        </div>
-        <Truck
-          className="mt-3"
-          volume={quote.volume}
-          items={sim.mode === 'items' ? sim.items : {}}
-          rooms={sim.mode === 'rooms' ? sim.rooms : {}}
-        />
-      </div>
+      {quote.eligibleObjet && (
+        <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-tri-soft px-3 py-1.5 text-[13px] font-semibold text-tri-dark">
+          <Check className="h-4 w-4" strokeWidth={3} /> Éligible Express Objet · dès 49 €
+        </p>
+      )}
 
       {/* Photos */}
       <div
