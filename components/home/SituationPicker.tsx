@@ -42,7 +42,7 @@ export function SituationPicker() {
   };
 
   return (
-    <div ref={ref} className="grid items-start gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
+    <div ref={ref} data-tour="situations" className="grid items-start gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
       <div>
         <ul className="space-y-2" aria-label="Situations">
           {LIST_SITUATIONS.map((x, i) => (

@@ -150,7 +150,7 @@ export function Hero() {
             <strong className="font-semibold text-navy">sous 48 h</strong>.
           </p>
 
-          <div style={{ animationDelay: '1s' }} className="anim-fade-up mt-9 flex flex-col items-center gap-4">
+          <div style={{ animationDelay: '1s' }} data-tour="hero-cta" className="anim-fade-up mt-9 flex flex-col items-center gap-4">
             <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
               <a
                 href="#simulateur"
@@ -185,6 +185,7 @@ export function Hero() {
 
           <div
             style={{ animationDelay: '1.12s' }}
+            data-tour="hero-start"
             className="anim-fade-up mx-auto mt-12 max-w-[760px] rounded-card bg-white/90 p-4 shadow-soft ring-1 ring-line backdrop-blur sm:p-5"
           >
             <p className="text-[15px] text-navy">

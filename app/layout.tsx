@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { CookieBanner } from '@/components/layout/CookieBanner';
 import { SmoothScroll } from '@/components/layout/SmoothScroll';
 import { HideOnPro } from '@/components/layout/HideOnPro';
+import { SiteTourLauncher } from '@/components/tour/SiteTourLauncher';
 
 const inter = localFont({ src: './fonts/inter.woff2', weight: '100 900', variable: '--font-inter', display: 'swap' });
 const archivo = localFont({ src: './fonts/archivo-black.woff2', weight: '400', variable: '--font-archivo', display: 'swap' });
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <HideOnPro>
           <Footer />
           <CookieBanner />
+          <SiteTourLauncher />
         </HideOnPro>
       </body>
     </html>

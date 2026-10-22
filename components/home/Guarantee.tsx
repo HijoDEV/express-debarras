@@ -8,7 +8,7 @@ export function Guarantee() {
     <section className="py-8 md:py-12">
       <Container>
         <Reveal>
-          <div className="on-dark relative overflow-hidden rounded-[28px] bg-[linear-gradient(120deg,#0E2A3B_0%,#1B3F55_60%,#24506B_100%)] p-7 text-white sm:p-10">
+          <div data-tour="guarantee" className="on-dark relative overflow-hidden rounded-[28px] bg-[linear-gradient(120deg,#0E2A3B_0%,#1B3F55_60%,#24506B_100%)] p-7 text-white sm:p-10">
             <div aria-hidden className="absolute -right-10 -top-24 h-64 w-64 rounded-full bg-signal/15 blur-3xl" />
             <div className="relative flex flex-col gap-6 md:flex-row md:items-center">
               <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">

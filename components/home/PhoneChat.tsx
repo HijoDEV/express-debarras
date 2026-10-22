@@ -101,7 +101,7 @@ export function PhoneChat() {
   const stage = STAGES.reduce((acc, s, i) => (t >= s.at ? i : acc), -1);
 
   return (
-    <div ref={wrap} className="relative mx-auto max-w-[1060px] px-4 [perspective:1600px]">
+    <div ref={wrap} data-tour="hero-phone" className="relative mx-auto max-w-[1060px] px-4 [perspective:1600px]">
       {/* ---------- cartes latérales synchronisées ---------- */}
       <div className="pointer-events-none absolute inset-0 hidden md:block" aria-hidden>
         <AnimatePresence>

@@ -33,7 +33,7 @@ export default function ProsPage() {
         }
         lead="Agences immobilières, commerces, bureaux, artisans, bailleurs : un débarras propre, tracé et facturé en HT."
       >
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-wrap gap-3" data-tour="pros-cta">
           <ButtonLink href="/pro/connexion" arrow>
             Se connecter à l’espace pro
           </ButtonLink>
@@ -44,7 +44,7 @@ export default function ProsPage() {
       </PageHero>
       <Section tone="kraft">
         <Container>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-tour="pros-offers">
             {PRO_OFFERS.map((o, i) => {
               const dark = 'popular' in o && o.popular;
               return (
@@ -101,7 +101,7 @@ export default function ProsPage() {
               ))}
             </div>
           </div>
-          <div id="contrat">
+          <div id="contrat" data-tour="pros-form">
             <ProForm />
           </div>
         </Container>

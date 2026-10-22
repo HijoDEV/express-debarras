@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Logo } from '@/components/brand/Logo';
 import { BRAND } from '@/lib/data';
 import { HazardStripe } from '@/components/ui/HazardStripe';
+import { SiteTourButton } from '@/components/tour/SiteTourLauncher';
 
 const COLS = [
   {
@@ -56,6 +57,11 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
+                {c.title === 'Aide' && (
+                  <li>
+                    <SiteTourButton className="text-left text-[15px] font-semibold text-navy transition-colors hover:underline hover:underline-offset-4">Visite guidée du site</SiteTourButton>
+                  </li>
+                )}
               </ul>
             </div>
           ))}

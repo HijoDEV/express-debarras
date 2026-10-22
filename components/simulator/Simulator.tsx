@@ -131,7 +131,7 @@ export function Simulator({ fullPage = false }: { fullPage?: boolean }) {
       {/* ---------- Étapes ---------- */}
       {sim.step <= 4 && (
         <div className="mb-5 flex items-center gap-2 overflow-x-auto no-scrollbar sm:mb-6">
-          <ol className="flex min-w-max flex-1 items-center gap-1.5 rounded-full bg-white p-1.5 shadow-soft ring-1 ring-line" aria-label="Étapes du simulateur">
+          <ol data-tour="sim-steps" className="flex min-w-max flex-1 items-center gap-1.5 rounded-full bg-white p-1.5 shadow-soft ring-1 ring-line" aria-label="Étapes du simulateur">
             {STEP_LABELS.map((l, i) => {
               const done = i < sim.step;
               const cur = i === sim.step;
@@ -167,7 +167,7 @@ export function Simulator({ fullPage = false }: { fullPage?: boolean }) {
       <div className={cn('grid items-start gap-5 lg:gap-6', wide ? 'lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)]' : 'mx-auto max-w-[760px]')}>
         {/* ---------- Scène : camion + prix en direct ---------- */}
         {wide && (
-          <div className="lg:sticky lg:top-24">
+          <div className="lg:sticky lg:top-24" data-tour="sim-stage">
             <Stage quote={quote} items={items} rooms={rooms} step={sim.step} />
           </div>
         )}
@@ -346,7 +346,7 @@ function StepSituation({ value, onPick }: { value: SimState['situation']; onPick
     <div>
       <h2 className="font-display text-h3 text-navy">Que voulez-vous débarrasser ?</h2>
       <p className="mt-2 text-[15px] text-navy/65">Choisissez la situation la plus proche. Vous pourrez tout ajuster.</p>
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5" role="radiogroup" aria-label="Situation">
+      <div data-tour="sim-situation" className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5" role="radiogroup" aria-label="Situation">
         {SITUATIONS.map((s) => (
           <ChoiceCard key={s.id} selected={value === s.id} onClick={() => onPick(s.id)} title={s.label} hint={s.hint}>
             <span className={cn('mb-4 grid h-14 w-14 place-items-center rounded-2xl', value === s.id ? 'bg-white' : 'bg-kraft')}>

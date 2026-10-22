@@ -34,7 +34,7 @@ export function Pricing({ showPacks = true }: { showPacks?: boolean }) {
       </div>
 
       {!pro ? (
-        <motion.div key="part" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <motion.div data-tour="pricing" key="part" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {/* Express Objet */}
           <div className="flex flex-col rounded-[24px] bg-signal-soft p-6 ring-1 ring-signal/50 transition duration-300 hover:-translate-y-1 hover:shadow-lift">
             <p className="font-mono text-label uppercase text-signal-dark">1 à 5 objets</p>
@@ -65,7 +65,7 @@ export function Pricing({ showPacks = true }: { showPacks?: boolean }) {
           </p>
         </motion.div>
       ) : (
-        <motion.div key="pro" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <motion.div data-tour="pricing" key="pro" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {PRO_OFFERS.map((o) => {
             const dark = 'popular' in o && o.popular;
             return (

@@ -111,3 +111,6 @@
   .pro-chrome { display: none !important; }
   .pro-print-page { box-shadow: none !important; border: 0 !important; margin: 0 !important; max-width: none !important; }
 }
+
+/* visite guidée : le bandeau cookies se met en retrait */
+html[data-tour] [aria-label="Cookies"] { visibility: hidden; }

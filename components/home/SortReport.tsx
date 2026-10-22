@@ -48,7 +48,7 @@ export function SortReport() {
 
   return (
     <div ref={ref}>
-      <div className="relative mx-auto max-w-[860px]">
+      <div className="relative mx-auto max-w-[860px]" data-tour="sortreport">
         {/* cartes flottantes */}
         {[
           { t: 'Emmaüs', d: '6 m³ réemployés', cls: 'left-0 top-16 md:left-4 -rotate-3' },

@@ -210,8 +210,9 @@ export function Tour({ open, onClose }: { open: boolean; onClose: (completed: bo
       }
       if (!alive()) return;
 
-      // 5. zoom caméra sur la zone
-      const r = el.getBoundingClientRect();
+      // 5. zoom caméra sur la zone (élément relu : il a pu être remplacé par un rechargement)
+      const cur = Array.from(document.querySelectorAll<HTMLElement>(`[data-tour="${st.target}"]`)).find(visible) ?? el;
+      const r = cur.getBoundingClientRect();
       let box: Box = { x: r.left, y: r.top, w: r.width, h: r.height };
       let s = 1;
       const s0 = stage();
