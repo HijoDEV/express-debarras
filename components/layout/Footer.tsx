@@ -18,7 +18,8 @@ const COLS = [
     links: [
       { href: '/a-propos', label: 'Qui sommes-nous' },
       { href: '/engagement-tri', label: 'Engagement tri' },
-      { href: '/pros', label: 'Espace pro' },
+      { href: '/pros', label: 'Offres pros' },
+      { href: '/pro/connexion', label: 'Espace pro (connexion)' },
       { href: '/situations/succession', label: 'Successions' },
       { href: '/espace', label: 'Espace équipe (démo)' },
     ],

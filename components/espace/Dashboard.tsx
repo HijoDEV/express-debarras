@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ClipboardList, FileText, Inbox, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Container } from '@/components/ui/Section';
+import { ProQueue } from './ProQueue';
 import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/cn';
 import { computeQuote, fmtEur, fmtVol } from '@/lib/pricing';
@@ -63,7 +64,7 @@ export function Dashboard() {
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <Label>Espace équipe · démonstration</Label>
-            <h1 className="mt-4 font-display text-h1">Réservations</h1>
+            <h1 className="mt-4 font-display text-h1">Réservations particuliers</h1>
             <p className="mt-3 max-w-xl text-[15.5px] text-navy/65">Les réservations faites dans le simulateur sont stockées dans ce navigateur. Changez leur statut, puis générez le rapport de tri.</p>
           </div>
           <div className="flex gap-2">
@@ -161,6 +162,7 @@ export function Dashboard() {
         <p className="mt-8 flex items-center gap-2 text-[13px] text-navy/70">
           <ClipboardList className="h-4 w-4" /> Démonstration : données stockées uniquement dans ce navigateur (localStorage).
         </p>
+        <ProQueue />
       </Container>
     </section>
   );

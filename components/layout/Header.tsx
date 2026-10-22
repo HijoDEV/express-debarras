@@ -69,7 +69,7 @@ export function Header() {
             </Link>
           ))}
           <ButtonLink
-            href="/pros"
+            href="/pro/connexion"
             variant={pill ? 'outlineDark' : 'secondary'}
             size="sm"
             className="ml-2"
@@ -121,7 +121,8 @@ export function Header() {
                 { href: '/engagement-tri', label: 'Engagement tri' },
                 { href: '/a-propos', label: 'Qui sommes-nous' },
                 { href: '/contact', label: 'Contact' },
-                { href: '/pros', label: 'Espace pro' },
+                { href: '/pro/connexion', label: 'Espace pro' },
+                { href: '/pros', label: 'Offres pros' },
               ].map((l, i) => (
                 <motion.div key={l.href} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i }}>
                   <Link href={l.href} onClick={() => setOpen(false)} className="block py-2 font-display text-[34px] tight">

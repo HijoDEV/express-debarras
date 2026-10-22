@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { ClipboardCheck, FileText, Receipt, Truck } from 'lucide-react';
 import { PageHero } from '@/components/pages/PageHero';
+import { ButtonLink } from '@/components/ui/Button';
 import { ProForm } from '@/components/pages/ProForm';
 import { Container, Section } from '@/components/ui/Section';
 import { Label } from '@/components/ui/Label';
@@ -31,7 +32,16 @@ export default function ProsPage() {
           </>
         }
         lead="Agences immobilières, commerces, bureaux, artisans, bailleurs : un débarras propre, tracé et facturé en HT."
-      />
+      >
+        <div className="mt-8 flex flex-wrap gap-3">
+          <ButtonLink href="/pro/connexion" arrow>
+            Se connecter à l’espace pro
+          </ButtonLink>
+          <ButtonLink href="#contrat" variant="secondary">
+            Demander un contrat
+          </ButtonLink>
+        </div>
+      </PageHero>
       <Section tone="kraft">
         <Container>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -91,7 +101,9 @@ export default function ProsPage() {
               ))}
             </div>
           </div>
-          <ProForm />
+          <div id="contrat">
+            <ProForm />
+          </div>
         </Container>
       </Section>
     </>

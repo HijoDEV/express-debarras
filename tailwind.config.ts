@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
+  darkMode: 'class',
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
     container: { center: true, padding: '1rem', screens: { '2xl': '1200px' } },
@@ -12,6 +13,15 @@ const config: Config = {
         kraft: '#F5F2EA',
         beton: { DEFAULT: '#8A9299', 600: '#5E676F' },
         line: '#E6E3DA',
+        p: {
+          bg: 'var(--p-bg)',
+          card: 'var(--p-card)',
+          line: 'var(--p-line)',
+          text: 'var(--p-text)',
+          muted: 'var(--p-muted)',
+          soft: 'var(--p-soft)',
+          hover: 'var(--p-hover)',
+        },
       },
       fontFamily: {
         display: ['var(--font-archivo)', 'system-ui', 'sans-serif'],
