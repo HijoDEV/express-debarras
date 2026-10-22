@@ -11,7 +11,8 @@ import { computeQuote, fmtEur, fmtVol, proPonctuelHT, type Quote } from '@/lib/p
 import { DEFAULT_SIM, SIM_EVENT, SIM_KEY, type SimState } from '@/lib/sim-store';
 import { scrollToEl } from '@/lib/scroll';
 import { addBooking, usePersistentState, type Booking } from '@/lib/storage';
-import { ChoiceCard, Stepper, Toggle, TruckGauge } from './parts';
+import { ChoiceCard, Stepper, Toggle } from './parts';
+import { Truck } from './Truck';
 
 const STEP_LABELS = ['Situation', 'Contenu', 'Accès', 'Délai et services', 'Résultat'];
 const SIT_ILLUS: Record<string, IllusId> = { meuble: 'armchair', objets: 'box', cave: 'bike', logement: 'sofa', local: 'desk' };
@@ -216,7 +217,12 @@ export function Simulator({ fullPage = false }: { fullPage?: boolean }) {
         {/* ---------- Récapitulatif desktop ---------- */}
         {showSummary && (
           <aside className="hidden lg:block" aria-label="Récapitulatif du prix">
-            <div className="sticky top-28">
+            <div className="sticky top-28 space-y-4">
+              {sim.step > 1 && (
+                <div className="rounded-[24px] bg-white p-3 pt-4 shadow-soft ring-1 ring-line">
+                  <Truck compact volume={quote.volume} items={sim.mode === 'items' ? sim.items : {}} rooms={sim.mode === 'rooms' ? sim.rooms : {}} />
+                </div>
+              )}
               <Summary quote={quote} />
             </div>
           </aside>
@@ -385,16 +391,23 @@ function StepContent({
         </div>
       )}
 
-      {/* Volume + jauge */}
-      <div className="mt-6 flex flex-col justify-between gap-4 rounded-2xl bg-kraft p-4 sm:flex-row sm:items-center">
-        <div>
-          <p className="font-mono text-label uppercase text-beton-600">Volume total</p>
-          <p className="mt-1 font-display text-[34px] leading-none tight">
-            <Counter value={quote.volume} format={(n) => fmtVol(Math.round(n * 10) / 10)} duration={0.5} />
-          </p>
-          {quote.eligibleObjet && <p className="mt-1.5 text-[13px] font-medium text-tri-dark">Éligible Express Objet · dès 49 €</p>}
+      {/* Volume + camion */}
+      <div className="mt-6 overflow-hidden rounded-2xl bg-kraft p-4 sm:p-5">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="font-mono text-label uppercase text-beton-600">Volume total</p>
+            <p className="mt-1 font-display text-[34px] leading-none tight">
+              <Counter value={quote.volume} format={(n) => fmtVol(Math.round(n * 10) / 10)} duration={0.5} />
+            </p>
+          </div>
+          {quote.eligibleObjet && <p className="rounded-full bg-tri-soft px-3 py-1 text-[13px] font-medium text-tri-dark">Éligible Express Objet · dès 49 €</p>}
         </div>
-        <TruckGauge volume={quote.volume} />
+        <Truck
+          className="mt-3"
+          volume={quote.volume}
+          items={sim.mode === 'items' ? sim.items : {}}
+          rooms={sim.mode === 'rooms' ? sim.rooms : {}}
+        />
       </div>
 
       {/* Photos */}
